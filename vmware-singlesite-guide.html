@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VMware Single-Site Configuration Guide - IBM Cloud</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0f62fe;
+            --secondary-color: #002d9c;
+            --accent-color: #00897b;
+            --text-primary: #161616;
+            --text-secondary: #525252;
+            --bg-light: #f4f4f4;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .intro-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .intro-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .intro-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .intro-section strong {
+            color: var(--secondary-color);
+        }
+
+        .screenshot-section {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .screenshot-section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .screenshot-header {
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .screenshot-number {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .screenshot-title {
+            flex: 1;
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .screenshot-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+            margin: 0 auto;
+        }
+
+        .screenshot-content {
+            padding: 30px;
+        }
+
+        .caption {
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .screenshot-content ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .screenshot-content li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .screenshot-content strong {
+            color: var(--secondary-color);
+        }
+
+        .screenshot-content p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .recap-section {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 60px 0 40px;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .recap-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .recap-section li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 0 5px;
+        }
+
+        .navigation {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 1;
+        }
+
+        .navigation h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .navigation a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+        }
+
+        .navigation a:hover {
+            background: var(--bg-light);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .screenshot-header {
+                padding: 15px 20px;
+            }
+            
+            .screenshot-title {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>VMware Single-Site Configuration Guide</h1>
+            <p>IBM Cloud VMware Cloud Foundation - Dedicated Environment Setup</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="intro-section">
+            <h2>What This Example Demonstrates</h2>
+            <p>
+                We're designing a <strong>single‑site, dedicated</strong> VMware Cloud Foundation (VCF) environment on IBM Cloud. 
+                In the patterns catalog, <em>single site</em> is achieved by starting from the standard two‑region reference and 
+                <strong>removing Region B and its Direct Link and CIS</strong> components (keep CIS only if you specifically need 
+                DDoS protection on the public edge). That's why you'll see only one region and one cluster in this build.
+            </p>
+            <p>
+                On the sizing side, the tool computes hosts and storage using the built‑in formulas for CPU, memory and vSAN 
+                (it accounts for buffers, hyper‑threading, RAID/FTT, and dedup when enabled). That is what drives the 
+                "Hardware configurations" you saw.
+            </p>
+        </section>
+
+        <nav class="navigation">
+            <h3>Quick Navigation</h3>
+            <a href="#screen-1">1. Projects List</a>
+            <a href="#screen-2">2. Project Overview</a>
+            <a href="#screen-3">3. Instance Header</a>
+            <a href="#screen-4">4. Workload Cluster Basics</a>
+            <a href="#screen-5">5. Workloads Table</a>
+            <a href="#screen-6">6. Hardware Configurations</a>
+            <a href="#screen-7">7. Cluster Overhead Configuration</a>
+            <a href="#screen-8">8. Cluster Storage - NFS</a>
+            <a href="#screen-9">9. Licenses & Network</a>
+            <a href="#screen-10">10. Security & Compliance Center</a>
+            <a href="#screen-11">11. SCC Setup Details</a>
+            <a href="#screen-12">12. SCC Totals</a>
+            <a href="#screen-13">13. Transit Gateway Initial</a>
+            <a href="#screen-14">14. Transit Gateway Complete</a>
+            <a href="#screen-15">15. Solution Summary</a>
+            <a href="#screen-16">16. Security Roll-up</a>
+            <a href="#screen-17">17. Pricing Summary</a>
+            <a href="#screen-18">18. Common Services → Pricing (SCC)</a>
+            <a href="#screen-19">19. Common Services → Pricing (Network)</a>
+            <a href="#exports">20. Exported Pricing Files</a>
+            <a href="#recap">Quick Recap</a>
+        </nav>
+
+        <!-- Screenshot 1 -->
+        <section class="screenshot-section" id="screen-1">
+            <div class="screenshot-header">
+                <div class="screenshot-number">1</div>
+                <div class="screenshot-title">Projects list - the tile for EX_VMware_SingleSite</div>
+            </div>
+            <img src="ss1.png" alt="Screenshot 1: Projects list showing EX_VMware_SingleSite tile" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Your project at a glance.</p>
+                <p>This card simply shows that the project has <strong>VMware</strong> plus <strong>Common Services (CS)</strong> attached. 
+                Common Services is where you add cross‑cutting items such as Transit Gateway/Direct Link networking and 
+                Security & Compliance Center (SCC) protections, which are used by any offering in the project.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 2 -->
+        <section class="screenshot-section" id="screen-2">
+            <div class="screenshot-header">
+                <div class="screenshot-number">2</div>
+                <div class="screenshot-title">Project Overview - name, opportunity, offerings</div>
+            </div>
+            <img src="ss2.png" alt="Screenshot 2: Project Overview configuration page" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Tell the tool what you're sizing.</p>
+                <ul>
+                    <li><strong>Offerings:</strong> VMware is selected; "Common Services" is also ticked so we can add shared networking and security later.</li>
+                    <li><strong>Discount:</strong> Left at <strong>0%</strong> because discounts require formal approval. Keeping it at 0% is best for first‑pass estimates.</li>
+                    <li><strong>Why nothing else here?</strong> We didn't pick PowerVS, VPC, SAP, or Satellite/ROKS because this example teaches a <em>VMware‑only</em> design. If you add them, the project grows into a multi‑offering solution (the tool supports that, but it's out of scope for this example).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Screenshot 3 -->
+        <section class="screenshot-section" id="screen-3">
+            <div class="screenshot-header">
+                <div class="screenshot-number">3</div>
+                <div class="screenshot-title">VMware → Instance header - VCF as a Service, Single‑Tenant, Region</div>
+            </div>
+            <img src="ss3.png" alt="Screenshot 3: VMware Instance header configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Choose the service flavor and location.</p>
+                <ul>
+                    <li><strong>VCF as a Service</strong> (managed by IBM) is selected instead of "VCF (Self‑managed)". For beginners this reduces operational burden—IBM runs the control stack and lifecycle, you size the workload clusters.</li>
+                    <li><strong>Single Tenant / Dedicated:</strong> Ensures hardware isolation (no shared hosts). That aligns with the "Dedicated" wording in the patterns.</li>
+                    <li><strong>Region & DC:</strong> <strong>Dallas (DAL10)</strong> chosen for proximity and availability.</li>
+                    <li><strong>Regional High Availability:</strong> <strong>Off</strong> because this is a <strong>single‑site</strong> pattern. If you need cross‑site continuity, turn this on and add Region B (that would track the two‑region reference).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Screenshot 4 -->
+        <section class="screenshot-section" id="screen-4">
+            <div class="screenshot-header">
+                <div class="screenshot-number">4</div>
+                <div class="screenshot-title">VMware → Workload cluster basics (workload‑a)</div>
+            </div>
+            <img src="ss4.png" alt="Screenshot 4: Workload cluster basics configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Define one cluster to run the app.</p>
+                <ul>
+                    <li><strong>Workload Type:</strong> <strong>Production</strong></li>
+                    <li><strong>Flavor:</strong> <strong>Standard</strong> (a balanced profile)</li>
+                    <li><strong>Storage Type:</strong> <strong>vSAN + optional NFS</strong>. vSAN is our primary datastore for VM disks. NFS remains available if we later add shared file capacities (we left NFS sizing at 0 in this run; see screen 7).</li>
+                    <li><strong>Requirement ID (WKLD‑001):</strong> A helpful label that will appear in exports.</li>
+                </ul>
+                <p><strong>Why one cluster?</strong> This example is intentionally simple. A second cluster (e.g., "management" or "database only") is a valid option if you need fault isolation, different host profiles, or licensing separation.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 5 -->
+        <section class="screenshot-section" id="screen-5">
+            <div class="screenshot-header">
+                <div class="screenshot-number">5</div>
+                <div class="screenshot-title">Workloads table - app VM counts and sizes</div>
+            </div>
+            <img src="ss5.png" alt="Screenshot 5: Workloads table with VM specifications" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Tell the tool what you plan to run.</p>
+                <p>We entered three tiers:</p>
+                <ul>
+                    <li><strong>web:</strong> 25 VMs × 2 vCPU × 8 GB RAM × 100 GB</li>
+                    <li><strong>app:</strong> 18 VMs × 4 vCPU × 16 GB RAM × 200 GB</li>
+                    <li><strong>db:</strong> 10 VMs × 8 vCPU × 64 GB RAM × 1,000 GB</li>
+                </ul>
+                <p>These numbers drive the host count and storage capacity. The tool translates them using its CPU/RAM/vSAN formulas (buffers, hyper‑threading, oversubscription, and vSAN overhead are applied automatically—see next screen).</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 6 -->
+        <section class="screenshot-section" id="screen-6">
+            <div class="screenshot-header">
+                <div class="screenshot-number">6</div>
+                <div class="screenshot-title">Hardware configurations - computed host profile & quantity</div>
+            </div>
+            <img src="ss6.png" alt="Screenshot 6: Hardware configurations showing host profile" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">What hardware meets the workload?</p>
+                <p>The tool found a fit with:</p>
+                <ul>
+                    <li><strong>7 hosts</strong> of <strong>Dual Intel Xeon Platinum 8260 (48 cores, 2.4 GHz)</strong></li>
+                    <li><strong>768 GB RAM per host</strong></li>
+                    <li><strong>vSAN usable per node:</strong> 23 TB (based on the vSAN/RAID/FTT math and buffers)</li>
+                    <li><strong>Estimated cost</strong> shown for the cluster (compute + vSAN) for this host profile.</li>
+                </ul>
+                <p><strong>Why this result?</strong></p>
+                <ul>
+                    <li>The <strong>CPU/vCPU</strong> capacity is calculated from total cores minus CPU buffer, plus hyper‑threading, then multiplied by vCPU‑per‑core and by the number of nodes.</li>
+                    <li>The <strong>RAM</strong> capacity applies a RAM buffer and any oversubscription factor you set.</li>
+                    <li>The <strong>vSAN usable TB</strong> applies the selected <strong>RAID/FTT</strong> ratio and <strong>headroom</strong>; dedup/compression can be applied when enabled.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Screenshot 7 -->
+        <section class="screenshot-section" id="screen-7">
+            <div class="screenshot-header">
+                <div class="screenshot-number">7</div>
+                <div class="screenshot-title">Cluster Overhead Configuration Details - the dials</div>
+            </div>
+            <img src="ss7.png" alt="Screenshot 7: Cluster overhead configuration settings" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Safety margins and architecture choices.</p>
+                <p>Defaults here express good practice for production sizing:</p>
+                <ul>
+                    <li><strong>Include Buffer: On</strong> — protects against growth and bursts.</li>
+                    <li><strong>Example values (as seen on the page):</strong> CPU buffer 30%, RAM buffer 20%, Hyper‑threading 10%, vSAN overhead 10%, RAM oversubscription 1.3, Max nodes 64.</li>
+                    <li><strong>CPU model chosen:</strong> the same 8260 profile the tool matched.</li>
+                    <li><strong>Nodes quantity:</strong> 7 (the minimum to satisfy the workload with these buffers).</li>
+                    <li><strong>Usable Node Capacity (TB):</strong> 23 per node, matching the vSAN math.</li>
+                </ul>
+                <p><strong>Why keep buffers?</strong> Turning them off can under‑size the environment. The sizing engine is designed to use these factors when it computes total vCPU, memory and vSAN capacity.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 8 -->
+        <section class="screenshot-section" id="screen-8">
+            <div class="screenshot-header">
+                <div class="screenshot-number">8</div>
+                <div class="screenshot-title">Cluster Storage - Attached NFS Storages</div>
+            </div>
+            <img src="ss8.png" alt="Screenshot 8: Cluster storage NFS configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">We didn't add NFS in this run.</p>
+                <p>All NFS tiers are <strong>0 TB</strong>. That's intentional: the app's VM disks live on <strong>vSAN</strong>.</p>
+                <p><strong>When would you add NFS?</strong> Shared file workloads, repositories, or cost‑optimized archival volumes. You'd size the tier (0.25/2/4/10 IOPS/GB) in <strong>TB</strong> increments to match your performance/price target.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 9 -->
+        <section class="screenshot-section" id="screen-9">
+            <div class="screenshot-header">
+                <div class="screenshot-number">9</div>
+                <div class="screenshot-title">Licenses & Network (instance‑level)</div>
+            </div>
+            <img src="ss9.png" alt="Screenshot 9: Licenses and network configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">What we left out—and why.</p>
+                <ul>
+                    <li><strong>OS Licenses:</strong> All set to <strong>0</strong>. Many clients bring their own OS licenses, or you can add Linux/Windows license quantities here to include them in price.</li>
+                    <li><strong>Private network endpoints</strong> (1 Gbps / 10 Gbps) left at <strong>0</strong>. For connectivity, we used <strong>Common Services → Network</strong> to design the core attachment (Transit Gateway + Direct Link), which is the right place to capture shared network services for a project.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Screenshot 10 -->
+        <section class="screenshot-section" id="screen-10">
+            <div class="screenshot-header">
+                <div class="screenshot-number">10</div>
+                <div class="screenshot-title">Security & Compliance Center (SCC) - Workload Protection</div>
+            </div>
+            <img src="ss10.png" alt="Screenshot 10: SCC workload protection configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Add protection and posture at project level.</p>
+                <ul>
+                    <li><strong>Association:</strong> Bound to <em>VMware Service Instance 1</em> in <strong>us‑south</strong>.</li>
+                    <li><strong>Cloud Posture (agentless):</strong> <strong>7</strong> <em>compute instances</em> (one per ESXi host in the cluster).</li>
+                    <li><strong>Host Protection (agent‑based):</strong> <strong>53</strong> <em>VM agents</em> (25 web + 18 app + 10 db).</li>
+                </ul>
+                <p>SCC pricing is then computed for these resources. This is a simple, transparent mapping beginners can follow: <strong>one posture unit per host</strong>, <strong>one agent per protected VM</strong>.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 11 -->
+        <section class="screenshot-section" id="screen-11">
+            <div class="screenshot-header">
+                <div class="screenshot-number">11</div>
+                <div class="screenshot-title">Security & Compliance Center (SCC) - Workload Protection Setup</div>
+            </div>
+            <img src="ss11.png" alt="Screenshot 11: SCC workload protection detailed setup" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Connect SCC to your VMware instance and tell it what to protect.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Associated with:</strong> <em>VMware Service Instance 1</em> — this ties SCC to the exact VMware environment you're building so counts and pricing line up.</li>
+                    <li><strong>Name:</strong> scc-protect-1 — a friendly label you'll see again in summaries.</li>
+                    <li><strong>Region:</strong> <em>us‑south</em> — SCC runs as a regional service; us‑south is a common default.</li>
+                    <li><strong>Cloud Posture (Agentless):</strong> <strong>7</strong> total compute instances — one posture check per ESXi host.</li>
+                    <li><strong>Host Protection (Agent‑based):</strong> <strong>53</strong> virtual machines — one agent per VM you want to protect.</li>
+                    <li><strong>Kubernetes (Agent‑based):</strong> <strong>0</strong> — we're not sizing containers in this example.</li>
+                </ul>
+                <p><strong>Why these settings:</strong> The counts reflect the cluster we sized earlier: <strong>7 hosts</strong> and <strong>53 VMs</strong> (25 web + 18 app + 10 db). Keeping SCC in a single region matches the single‑site pattern.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 12 -->
+        <section class="screenshot-section" id="screen-12">
+            <div class="screenshot-header">
+                <div class="screenshot-number">12</div>
+                <div class="screenshot-title">SCC - Totals Panel</div>
+            </div>
+            <img src="ss12.png" alt="Screenshot 12: SCC totals summary panel" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">A quick check that your protection counts match your environment.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Kubernetes workers:</strong> <strong>0</strong></li>
+                    <li><strong>VMs protected:</strong> <strong>53</strong></li>
+                    <li><strong>Total resources:</strong> <strong>60</strong> (7 hosts + 53 VMs)</li>
+                </ul>
+                <p><strong>Why these settings:</strong> This page is a "sanity check." If you later add more VMs or a second cluster, this total should rise accordingly. For a first pass, matching the earlier compute plan keeps cost and protection consistent.</p>
+                <p><strong>Options you could add later:</strong> If you deploy containers, increase <strong>Kubernetes worker nodes</strong> to include them in SCC. If you only want a subset of VMs protected (e.g., just production), lower the VM count to exactly what you want to license and protect.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 13 -->
+        <section class="screenshot-section" id="screen-13">
+            <div class="screenshot-header">
+                <div class="screenshot-number">13</div>
+                <div class="screenshot-title">Common Services → Network - Add Transit Gateway (Initial Form)</div>
+            </div>
+            <img src="ss13.png" alt="Screenshot 13: Transit Gateway initial configuration form" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Start the network hub your environment will attach to.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li>The <strong>Transit Gateway</strong> tile is selected under <strong>Add Services → Network</strong>.</li>
+                    <li>Fields for <strong>Association</strong>, <strong>Name</strong>, <strong>Location</strong>, <strong>Routing Type</strong> are empty.</li>
+                    <li>A starter <strong>Connections</strong> row (named <em>Connection 1</em>) with placeholders for:
+                        <ul>
+                            <li><strong>Connection Type</strong> (e.g., Direct Link or VPN)</li>
+                            <li><strong>Number of Connections</strong></li>
+                            <li><strong>Egress Data (GB) per month</strong> (estimate for outbound traffic)</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>Why we're using Transit Gateway:</strong> Think of Transit Gateway as a <strong>hub</strong> that can connect your VMware environment to your on‑prem network and to other IBM Cloud networks as you grow. Capturing this under <strong>Common Services</strong> keeps shared networking in one place for the whole project (not just VMware).</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 14 -->
+        <section class="screenshot-section" id="screen-14">
+            <div class="screenshot-header">
+                <div class="screenshot-number">14</div>
+                <div class="screenshot-title">Common Services → Network - Transit Gateway (Completed)</div>
+            </div>
+            <img src="ss14.png" alt="Screenshot 14: Transit Gateway completed configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Define where the hub lives and how you connect to it.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Associated with:</strong> <em>VMware Service Instance 1</em> — so this TGW serves the VMware environment you sized.</li>
+                    <li><strong>Name:</strong> NET-EX_VMware_SingleSite</li>
+                    <li><strong>Location:</strong> <em>Dallas</em> — matches the VMware region to keep things simple.</li>
+                    <li><strong>Routing Type:</strong> <em>Global</em> — lets this gateway route across regions if you add them later.</li>
+                    <li><strong>Connections table:</strong>
+                        <ul>
+                            <li><strong>Connection 1 → Direct Link</strong></li>
+                            <li><strong>Number of Connections:</strong> <strong>2</strong> — two circuits for resilience.</li>
+                            <li><strong>Egress Data (GB) per month:</strong> <strong>10</strong> — a small placeholder for outbound usage.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>Why these settings:</strong> <strong>Direct Link</strong> gives a <strong>private, predictable path</strong> between your data center and IBM Cloud — ideal for production VMware. <strong>Two</strong> links protect against a single circuit failure. <strong>Global routing</strong> keeps future options open without forcing any multi‑region today.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 15 -->
+        <section class="screenshot-section" id="screen-15">
+            <div class="screenshot-header">
+                <div class="screenshot-number">15</div>
+                <div class="screenshot-title">Solution & Pricing → Solution (VMware Tab)</div>
+            </div>
+            <img src="ss15.png" alt="Screenshot 15: Solution summary for VMware configuration" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">The tool rolls up what it will build for VMware.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Instance details:</strong> name, region (Dallas / DAL10), and <strong>Single Tenant / Dedicated</strong>.</li>
+                    <li><strong>Workload cluster:</strong> workload-a with the <strong>7‑node</strong> plan we sized.</li>
+                    <li><strong>Capacity summary:</strong> shows how the <strong>requirements</strong> (your VM counts) compare to the <strong>solution capacity</strong> (what 7 nodes provide) for CPU, RAM, and storage.</li>
+                    <li><strong>Other Sections:</strong> lists the <strong>Host Profile</strong> (dual‑socket, 48 cores, 768 GB RAM, 23 TB vSAN per node) and placeholders for <strong>Licenses</strong> and <strong>Network</strong> we left at zero in this example.</li>
+                </ul>
+                <p><strong>Why this matters:</strong> This view confirms the math: a <strong>7‑node</strong> cluster satisfies your inputs with the recommended buffers/overheads applied earlier (no hidden knobs to surprise beginners).</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 16 -->
+        <section class="screenshot-section" id="screen-16">
+            <div class="screenshot-header">
+                <div class="screenshot-number">16</div>
+                <div class="screenshot-title">Solution & Pricing → Solution (Common Services → Security Roll‑up)</div>
+            </div>
+            <img src="ss16.png" alt="Screenshot 16: Common Services security configuration summary" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">SCC items summarized so they appear on exports and quotes.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>SCC Workload Protection</strong> block for scc-protect-1 (region us‑south).</li>
+                    <li>Counts restated as <strong>7 Multi‑Cloud Compute Instances</strong> (agentless posture on ESXi) and <strong>53 VM Nodes</strong> (agent‑based protection).</li>
+                    <li><strong>Kubernetes workers:</strong> <strong>0</strong> — consistent with the VMware‑only example.</li>
+                </ul>
+                <p><strong>Why this matters:</strong> This section ensures SCC quantities show up alongside VMware in the final solution output, so sizing and pricing stay in sync. It's exactly the one‑unit‑per‑host and one‑agent‑per‑VM mapping beginners can follow.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 17 -->
+        <section class="screenshot-section" id="screen-17">
+            <div class="screenshot-header">
+                <div class="screenshot-number">17</div>
+                <div class="screenshot-title">Solution & Pricing → Pricing (VMware Tab)</div>
+            </div>
+            <img src="ss17.png" alt="Screenshot 17: VMware pricing estimate summary" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">A first‑pass monthly estimate for the VMware stack.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Pricing table:</strong> "<strong>VMware as a Service</strong>" with a monthly total (shown as <strong>$47,012</strong> in the capture).</li>
+                    <li><strong>Other Sections → Host Profile:</strong> unit price (about <strong>$6,716</strong>/host/month) × <strong>7 hosts</strong> = the same total shown above.</li>
+                    <li><strong>Licenses / Network:</strong> <strong>$0.00</strong> in this example because we left those items out intentionally.</li>
+                    <li>The yellow banner reminds you this is a <strong>non‑binding initial estimate</strong>; final pricing is validated in the IBM Cloud Portal.</li>
+                </ul>
+                <p><strong>Why this is useful:</strong> It shows the <em>entire</em> VMware platform cost in one place for the chosen host profile and node count. Later, you can add licenses, public edge, or more networking and immediately see the impact.</p>
+                <p><strong>What we didn't include (yet):</strong> <strong>Network (Direct Link/TGW) pricing</strong> and <strong>SCC pricing</strong> appear under their respective Common Services sections when you export the full solution; we kept this tab focused on the VMware stack for clarity.</p>
+            </div>
+        </section>
+
+        <!-- Additional screenshots would continue here following the same pattern -->
+
+        
+        <!-- Screenshot 18 -->
+        <section class="screenshot-section" id="screen-18">
+            <div class="screenshot-header">
+                <div class="screenshot-number">18</div>
+                <div class="screenshot-title">Common Services → Pricing (Security &amp; Compliance Center)</div>
+            </div>
+            <img src="ss18.png" alt="Screenshot 18: SCC pricing summary for Common Services" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">What SCC costs look like when sized from your host and VM counts.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Total price for Common Services:</strong> includes SCC and any other CS items. In this view the focus is SCC.</li>
+                    <li><strong>Cloud Posture Management (agentless):</strong> <strong>7</strong> compute instances — one per ESXi host.</li>
+                    <li><strong>Host Protection (agent‑based):</strong> <strong>53</strong> VMs — one agent per protected VM.</li>
+                    <li><strong>Kubernetes Protection:</strong> <strong>0</strong> — no container workers in this example.</li>
+                    <li><strong>Pricing items:</strong> a simple breakdown that multiplies monthly unit prices by quantities (e.g., Multi‑Cloud Compute Instances × 7; VM Nodes × 53).</li>
+                </ul>
+                <p><strong>Why this matters:</strong> SCC pricing is a direct, transparent mapping from the resources you sized earlier. If you change the number of hosts or VMs, this page updates accordingly. It’s a great final check that <em>security counts = infrastructure counts</em>.</p>
+            </div>
+        </section>
+
+        <!-- Screenshot 19 -->
+        <section class="screenshot-section" id="screen-19">
+            <div class="screenshot-header">
+                <div class="screenshot-number">19</div>
+                <div class="screenshot-title">Common Services → Pricing (Network / Transit Gateway)</div>
+            </div>
+            <img src="ss19.png" alt="Screenshot 19: Network pricing summary for Transit Gateway and egress" class="screenshot-image">
+            <div class="screenshot-content">
+                <p class="caption">Network pricing for the shared hub (Transit Gateway) and its connection.</p>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Transit Gateway:</strong> Associated to <em>VMware Service Instance 1</em>, <strong>Location:</strong> Dallas, <strong>Routing:</strong> Global.</li>
+                    <li><strong>Connection 1:</strong> <em>Direct Link connection</em> with <strong>2</strong> links for resilience and a small <strong>Global egress estimate of 10&nbsp;GB/month</strong>.</li>
+                    <li><strong>Pricing items:</strong> separate line items for <em>Direct Link connection</em> quantity and <em>Global egress data</em>.</li>
+                </ul>
+                <p><strong>Why this matters:</strong> Keeping network as a Common Service lets you reuse the same TGW and connectivity if you add more offerings later (e.g., VPC or additional VMware clusters). For production, we recommend <strong>Global</strong> routing and redundant Direct Link circuits.</p>
+            </div>
+        </section>
+    
+        <!-- Exported Pricing Files -->
+        <section class="screenshot-section" id="exports">
+            <div class="screenshot-header">
+                <div class="screenshot-number">20</div>
+                <div class="screenshot-title">Exported Pricing Files (Entire Solution)</div>
+            </div>
+            <div class="screenshot-content">
+                <p class="caption">These files were exported directly from the <strong>Public Cloud Solutioning Tool</strong> and reflect the total pricing for the complete single‑site VMware solution (VMware + Common Services).</p>
+                <ul>
+                    <li><a href="Test Customer-vmware-pricing-2025-10-8.docx">Test Customer‑vmware‑pricing‑2025‑10‑8.docx</a> — Word export</li>
+                    <li><a href="Test Customer-vmware-pricing-2025-10-8.xlsx">Test Customer‑vmware‑pricing‑2025‑10‑8.xlsx</a> — Excel export</li>
+                </ul>
+            </div>
+        </section>
+<section class="recap-section" id="recap">
+            <h2>Quick Recap of Teaching Points</h2>
+            <ul>
+                <li>A <strong>single‑site</strong> VMware design stays simple: one region, one cluster, one Transit Gateway, and one SCC policy.</li>
+                <li><strong>Counts drive everything</strong>: 7 hosts and 53 VMs flow through VMware capacity, SCC protection, and solution/pricing.</li>
+                <li><strong>Common Services</strong> (Network + Security) keep shared items in one place and reusable across offerings as your project grows.</li>
+                <li>We <strong>intentionally left out</strong> Kubernetes, OS licenses, and a public edge to keep the walkthrough focused; you can add them later using the same screens when needed.</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 IBM Cloud VMware Configuration Guide</p>
+            <p>
+                <span class="badge">VMware</span>
+                <span class="badge">Single-Site</span>
+                <span class="badge">Production</span>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
