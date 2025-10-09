@@ -488,7 +488,7 @@
 <p>Complete Learning Guide for Designing and Pricing Cloud Solutions</p>
 <a class="header-link" href="https://internal.cloud-solutioning.ibm.com/" target="_blank">Access the Solutioning Tool</a>
 	<div style="margin-top: 1rem;">
-		<a href="PCS_Field_Guide_Templates_v3.1.xlsx" class="header-link" download>Download Template Workbook</a>
+		<a href="PCS_Field_Guide_Templates_v3.2.xlsx" class="header-link" download>Download Template Workbook</a>
 		<p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.9;">A preparation aid that collects the minimum inputs for the IBM Public Cloud Solutioning Tool (PCS)</p>
 	</div>
 </header>
@@ -799,7 +799,7 @@
 <li>You selected the appropriate <strong>pattern</strong> for your use case</li>
 <li>Every field in <strong>IT Requirements</strong> is filled with valid data (no red validation marks)</li>
 <li>Your <strong>Solution</strong> displays all expected components for the chosen pattern</li>
-<li>The <strong>Pricing</strong> view populates with a clean breakdown that accurately reflects your Solution</li>
+<li>The <strong>Pricing</strong> view populates with a clean breakdown that accurately reflects your Solution, including <strong>Common Services (SCC + Network/TGW)</strong> totals</li>
 <li>You successfully <strong>exported</strong> Word/Excel deliverables</li>
 <li>You can confidently <strong>explain each line item</strong> to your customer or stakeholder</li>
 </ul>
@@ -841,6 +841,9 @@
 <section id="vmware">
 <span class="section-number">Section 2</span>
 <h2>VMware Solutions</h2>
+<div class="callout info" style="border-left:4px solid #0f62fe;padding:.75rem 1rem;margin:.5rem 0;background:#f0f7ff">
+<strong>Where do I pick “Dedicated”?</strong> Choose it inside the <em>VMware</em> IT Requirements (or start from the “VMware Dedicated” pattern). It is not a separate offering on the Project Overview page.
+</div>
 <h3>2.1 Concepts &amp; Available Patterns</h3>
 <div class="callout info" style="border-left:4px solid #0f62fe;padding:.75rem 1rem;margin:.5rem 0;background:#f0f7ff">
 <strong>Why does single‑site start from the 2‑region reference?</strong>
@@ -856,6 +859,10 @@
 <li>CIS load balancer (unless DDoS protection is needed on public network)</li>
 <li>Region B and its Direct Link</li>
 </ul>
+
+<div class="tip-box" style="margin-top:.5rem;">
+<strong>Walkthrough:</strong> For a step-by-step single-site build (with SCC &amp; Network pricing), open <a href="vmware-singlesite-guide.html">vmware-singlesite-guide.html</a>.
+</div>
 </div>
 <div class="card">
 <h4>Two-Region VMware Dedicated</h4>
